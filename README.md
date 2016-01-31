@@ -1,8 +1,16 @@
 # summoner-stats
 
-This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack) version 3.3.0-beta.0.
+## Summary
+This app uses the MEAN stack and the League of Legends API to create a recent match stats for a given summoner.
+
+###To Do
+- Implement better caching to prevent getting 429 responses when going over the limit of requests for 10 seconds
+- Include jQuery for improved user interaction (hover over spells/items for description)
+- Some CSS fixes to make it look nicer :)
 
 ## Getting Started
+
+This project was generated with the [Angular Full-Stack Generator](https://github.com/DaftMonk/generator-angular-fullstack) version 3.3.0-beta.0.
 
 ### Prerequisites
 
@@ -22,6 +30,11 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 3. Run `mongod` in a separate shell to keep an instance of the MongoDB Daemon running
 
 4. Run `grunt serve` to start the development server. It should automatically open the client in your browser when ready.
+
+### Important
+
+Make sure you have a developer key from https://developer.riotgames.com/ and place it in the client/app/summonerService/summonerService.service.js like this:
+`apiKey = "?api_key= <your_key> ";`
 
 ## Build & development
 
