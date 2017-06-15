@@ -3,10 +3,15 @@
 ## Summary
 This app uses the MEAN stack and the League of Legends API to create a recent match stats for a given summoner.
 
+##Purpose
+- To apply angular patterns inspired by [John Papa's Angular Styleguide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).
+- Learn more about GruntJs, Bower and Yeoman generators
+- Explore NodeJs with express
+
 ###To Do
-- Implement better caching to prevent getting 429 responses when going over the limit of requests for 10 seconds
-- Include jQuery for improved user interaction (hover over spells/items for description)
-- Some CSS fixes to make it look nicer :)
+- Add CSS to make mobile view nicer
+- Implement unit tests for NodeJs service and angular services
+
 
 ## Getting Started
 
@@ -21,6 +26,12 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 - [Grunt](http://gruntjs.com/) (`npm install --global grunt-cli`)
 - [MongoDB](https://www.mongodb.org/) - Keep a running daemon with `mongod`
 
+### Get League of Legends Dev Key [Important]
+
+1. Register for a dev kay at https://developer.riotgames.com/.
+2. Add the key in `config/local.env.sample.json` and remove `sample` from filename
+3. Run `grunt serve`, this will create `settings.js` in `server/config/environment` that is available for the node server to use.
+
 ### Developing
 
 1. Run `npm install` to install server dependencies.
@@ -31,15 +42,11 @@ This project was generated with the [Angular Full-Stack Generator](https://githu
 
 4. Run `grunt serve` to start the development server. It should automatically open the client in your browser when ready.
 
-### Important
-
-Make sure you have a developer key from https://developer.riotgames.com/ and place it in the client/app/summonerService/summonerService.service.js like this:
-`apiKey = "?api_key= <your_key> ";`
 
 ## Build & development
 
 Run `grunt build` for building and `grunt serve` for preview.
 
-## Testing
+<!-- ## Testing
 
-Running `npm test` will run the unit tests with karma.
+Running `npm test` will run the unit tests with karma. -->

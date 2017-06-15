@@ -1,16 +1,12 @@
-'use strict';
+(function() {
+    'use strict';
 
-angular.module('summonerStatsApp', [
-  'summonerStatsApp.constants',
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
-  'ui.router',
-  'ui.bootstrap'
-])
-  .config(function($urlRouterProvider, $locationProvider) {
-    $urlRouterProvider
-      .otherwise('/');
+    angular.module('SummonerStatsApp')
 
-    $locationProvider.html5Mode(true);
-  });
+    .config(function($urlRouterProvider, $locationProvider) {
+        $locationProvider.html5Mode(true);
+    })
+    .config(function(SummonerStateConfigProvider) {
+        SummonerStateConfigProvider.initialize();
+    });
+})();

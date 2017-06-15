@@ -1,0 +1,53 @@
+.matchWin {
+    background-color: $win-color;
+}
+
+.fellowPlayers {
+    color: #FFFFFF;
+    cursor: pointer;
+
+    &hover{
+        color: #b5b5b5;
+        text-decoration: none;
+    }
+}
+
+.match-stats{
+    font-size: 1.2em;
+}
+
+.players-champion {
+    width: 20%;
+}
+
+.champion-img {
+  background-color: black;
+  img {
+    width: 100%;
+  }
+  label {
+    text-align: center;
+    width: 100%;
+  }
+}
+
+.thumbnailIcon {
+  width: 100%;
+}
+
+.match-info {
+  background-color: black;
+  font-size: 1.5em;
+}
+
+.padding-row {
+    margin-top: 10px;
+    margin-bottom: 9px;
+}
+
+////////////////////////
+
+.match {
+  background-color: $defeat-color;
+  margin-bottom: 15px;
+}

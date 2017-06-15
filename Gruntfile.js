@@ -4,7 +4,7 @@
 module.exports = function (grunt) {
   var localConfig;
   try {
-    localConfig = require('./server/config/local.env');
+    localConfig = grunt.file.readJSON('./config/local.env.json');
   } catch(e) {
     localConfig = {};
   }
@@ -17,8 +17,7 @@ module.exports = function (grunt) {
     cdnify: 'grunt-google-cdn',
     protractor: 'grunt-protractor-runner',
     buildcontrol: 'grunt-build-control',
-    istanbul_check_coverage: 'grunt-mocha-istanbul',
-    ngconstant: 'grunt-ng-constant'
+    istanbul_check_coverage: 'grunt-mocha-istanbul'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -61,21 +60,6 @@ module.exports = function (grunt) {
         files: ['<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js'],
         tasks: ['newer:babel:client']
       },
-      ngconstant: {
-        files: ['<%= yeoman.server %>/config/environment/shared.js'],
-        tasks: ['ngconstant']
-      },
-      injectJS: {
-        files: [
-          '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
-          '!<%= yeoman.client %>/app/app.js'
-        ],
-        tasks: ['injector:scripts']
-      },
-      injectCss: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.css'],
-        tasks: ['injector:css']
-      },
       mochaTest: {
         files: ['<%= yeoman.server %>/**/*.{spec,integration}.js'],
         tasks: ['env:test', 'mochaTest']
@@ -83,10 +67,6 @@ module.exports = function (grunt) {
       jsTest: {
         files: ['<%= yeoman.client %>/{app,components}/**/*.{spec,mock}.js'],
         tasks: ['newer:jshint:all', 'wiredep:test', 'karma']
-      },
-      injectSass: {
-        files: ['<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
-        tasks: ['injector:sass']
       },
       sass: {
         files: ['<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
@@ -310,30 +290,11 @@ module.exports = function (grunt) {
       }
     },
 
-    // Dynamically generate angular constant `appConfig` from
-    // `server/config/environment/shared.js`
-    ngconstant: {
-      options: {
-        name: 'summonerStatsApp.constants',
-        dest: '<%= yeoman.client %>/app/app.constant.js',
-        deps: [],
-        wrap: true,
-        configPath: '<%= yeoman.server %>/config/environment/shared'
-      },
-      app: {
-        constants: function() {
-          return {
-            appConfig: require('./' + grunt.config.get('ngconstant.options.configPath'))
-          };
-        }
-      }
-    },
-
     // Package all the html partials into a single javascript payload
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'summonerStatsApp',
+        module: 'SummonerStatsApp',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
@@ -426,10 +387,6 @@ module.exports = function (grunt) {
 
     // Run some tasks in parallel to speed up the build process
     concurrent: {
-      pre: [
-        'injector:sass',
-        'ngconstant'
-      ],
       server: [
         'newer:babel:client',
         'sass',
@@ -536,6 +493,20 @@ module.exports = function (grunt) {
       all: localConfig
     },
 
+    replace: {
+            settings: {
+                options: {
+                    patterns: [{ json: localConfig }]
+                },
+                files: [{
+                    expand: true,
+                    cwd: './config',
+                    src: ['settings.js'],
+                    dest: '<%= yeoman.server %>/config/environment'
+                }]
+            }
+        },
+
     // Compiles ES6 to JavaScript using Babel
     babel: {
       options: {
@@ -572,78 +543,7 @@ module.exports = function (grunt) {
           compass: false
         },
         files: {
-          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
-        }
-      }
-    },
-
-    injector: {
-      options: {},
-      // Inject application script files into index.html (doesn't include bower)
-      scripts: {
-        options: {
-          transform: function(filePath) {
-            var yoClient = grunt.config.get('yeoman.client');
-            filePath = filePath.replace('/' + yoClient + '/', '');
-            filePath = filePath.replace('/.tmp/', '');
-            return '<script src="' + filePath + '"></script>';
-          },
-          sort: function(a, b) {
-            var module = /\.module\.js$/;
-            var aMod = module.test(a);
-            var bMod = module.test(b);
-            // inject *.module.js first
-            return (aMod === bMod) ? 0 : (aMod ? -1 : 1);
-          },
-          starttag: '<!-- injector:js -->',
-          endtag: '<!-- endinjector -->'
-        },
-        files: {
-          '<%= yeoman.client %>/index.html': [
-               [
-                 '<%= yeoman.client %>/{app,components}/**/!(*.spec|*.mock).js',
-                 '!{.tmp,<%= yeoman.client %>}/app/app.{js,ts}'
-               ]
-            ]
-        }
-      },
-
-      // Inject component scss into app.scss
-      sass: {
-        options: {
-          transform: function(filePath) {
-            var yoClient = grunt.config.get('yeoman.client');
-            filePath = filePath.replace('/' + yoClient + '/app/', '');
-            filePath = filePath.replace('/' + yoClient + '/components/', '../components/');
-            return '@import \'' + filePath + '\';';
-          },
-          starttag: '// injector',
-          endtag: '// endinjector'
-        },
-        files: {
-          '<%= yeoman.client %>/app/app.scss': [
-            '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}',
-            '!<%= yeoman.client %>/app/app.{scss,sass}'
-          ]
-        }
-      },
-
-      // Inject component css into index.html
-      css: {
-        options: {
-          transform: function(filePath) {
-            var yoClient = grunt.config.get('yeoman.client');
-            filePath = filePath.replace('/' + yoClient + '/', '');
-            filePath = filePath.replace('/.tmp/', '');
-            return '<link rel="stylesheet" href="' + filePath + '">';
-          },
-          starttag: '<!-- injector:css -->',
-          endtag: '<!-- endinjector -->'
-        },
-        files: {
-          '<%= yeoman.client %>/index.html': [
-            '<%= yeoman.client %>/{app,components}/**/*.css'
-          ]
+          '.tmp/styles/app.css' : '<%= yeoman.client %>/styles/app.scss'
         }
       }
     },
@@ -674,9 +574,8 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'concurrent:pre',
+        'replace:settings',
         'concurrent:server',
-        'injector',
         'wiredep:client',
         'postcss',
         'concurrent:debug'
@@ -686,9 +585,8 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'env:all',
-      'concurrent:pre',
+      'replace:settings',
       'concurrent:server',
-      'injector',
       'wiredep:client',
       'postcss',
       'express:dev',
@@ -717,9 +615,7 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'clean:server',
         'env:all',
-        'concurrent:pre',
         'concurrent:test',
-        'injector',
         'postcss',
         'wiredep:test',
         'karma'
@@ -743,9 +639,7 @@ module.exports = function (grunt) {
           'clean:server',
           'env:all',
           'env:test',
-          'concurrent:pre',
           'concurrent:test',
-          'injector',
           'wiredep:client',
           'postcss',
           'express:dev',
@@ -797,9 +691,8 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'clean:dist',
-    'concurrent:pre',
+    'replace:settings',
     'concurrent:dist',
-    'injector',
     'wiredep:client',
     'useminPrepare',
     'postcss',

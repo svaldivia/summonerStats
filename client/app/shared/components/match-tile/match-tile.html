@@ -1,0 +1,96 @@
+<div ng-class="{matchWin:vm.playerMatchInfo.stats.win}" class="row match">
+  <div class="col-md-2 col-xs-3 champion-img">
+    <img ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/champion/{{vm.getChampionName(vm.match.championId, true)}}.png " alt="Champion" />
+    <label class="champion-name">{{vm.getChampionName(vm.match.championId)}}</label>
+  </div>
+  <div class="col-md-10 col-xs-9 ">
+    <div class="row match-info">
+      <div class="col-md-3 col-xs-6 ">
+        <strong>Mode:</strong> {{vm.match.gameMode}}
+      </div>
+      <div class="col-md-3 col-xs-6 ">
+        <strong>When:</strong> {{vm.match.gameCreation| date:'MM/dd/yyyy'}}
+      </div>
+      <div class="col-md-3 col-xs-6 ">
+        <strong>Duration:</strong> {{vm.match.gameDuration/60| number:0}} Min
+      </div>
+      <div class="col-md-3 col-xs-6">
+        <strong>Result:</strong> {{vm.playerMatchInfo.stats.win ? "Victory" : "Defeat"}}
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3 col-xs-12 text-center match-stats padding-row">
+
+        <div class="row">
+          <strong>Level:</strong> {{vm.playerMatchInfo.stats.champLevel}}
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-xs-6">
+            <div class="row">
+              {{vm.playerMatchInfo.stats.kills}} / {{vm.playerMatchInfo.stats.deaths}} / {{vm.playerMatchInfo.stats.assists}}
+            </div>
+            <div class="row">
+              KDA: {{ (match.stats.kills + vm.playerMatchInfo.stats.assists) / vm.playerMatchInfo.stats.deaths| number:2}}
+            </div>
+          </div>
+          <div class="col-md-6 col-xs-6">
+            <div class="row">
+              Gold: {{vm.playerMatchInfo.stats.goldEarned | number:0}}
+            </div>
+            <div class="row">
+              Minions: {{vm.playerMatchInfo.stats.totalMinionsKilled}}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="col-md-1 col-xs-3">
+        <div class="row padding-row">
+          <div class="col-md-12">
+            <img class="thumbnailIcon" ng-if="match.spell1" ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/spell/{{vm.getSpellName(match.spell1)}}.png" alt="spell" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <img class="thumbnailIcon" ng-if="match.spell2" ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/spell/{{vm.getSpellName(match.spell2)}}.png" alt="spell" />
+          </div>
+        </div>
+      </div>
+      <div class="col-md-3 col-xs-9">
+        <div class="row padding-row">
+          <div class="col-md-4 col-xs-4">
+            <img class="thumbnailIcon" ng-if="vm.playerMatchInfo.stats.item0" ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/item/{{vm.playerMatchInfo.stats.item0}}.png" alt="item" />
+          </div>
+          <div class="col-md-4 col-xs-4">
+            <img class="thumbnailIcon" ng-if="vm.playerMatchInfo.stats.item1" ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/item/{{vm.playerMatchInfo.stats.item1}}.png" alt="item" />
+          </div>
+          <div class="col-md-4 col-xs-4">
+            <img class="thumbnailIcon" ng-if="vm.playerMatchInfo.stats.item2" ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/item/{{vm.playerMatchInfo.stats.item2}}.png" alt="item" />
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4 col-xs-4">
+            <img class="thumbnailIcon" ng-if="vm.playerMatchInfo.stats.item3" ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/item/{{vm.playerMatchInfo.stats.item3}}.png" alt="item" />
+          </div>
+          <div class="col-md-4 col-xs-4">
+            <img class="thumbnailIcon" ng-if="vm.playerMatchInfo.stats.item4" ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/item/{{vm.playerMatchInfo.stats.item4}}.png" alt="item" />
+          </div>
+          <div class="col-md-4 col-xs-4">
+            <img class="thumbnailIcon" ng-if="vm.playerMatchInfo.stats.item5" ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/item/{{vm.playerMatchInfo.stats.item5}}.png" alt="item" />
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-xs-12 padding-row">
+          <div ng-repeat="(teamId, players) in vm.teams" class="col-md-6 col-xs-6">
+            <div ng-repeat="player in players" class="row">
+              <img ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/champion/{{vm.getChampionName(player.championId, true)}}.png" class="players-champion" alt="" />
+              <a ui-sref="{{::vm.appStates.PROFILE}}(::{name: player.name})" class="fellowPlayers">{{player.name}}</a>
+            </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>

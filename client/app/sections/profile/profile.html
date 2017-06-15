@@ -1,0 +1,19 @@
+<header class="banner" id="banner">
+  <div class="container">
+    <img ng-src="http://ddragon.leagueoflegends.com/cdn/7.11.1/img/profileicon/{{vm.summonerData.profileIconId}}.png " alt="Profile Picture">
+    <h1>{{vm.summonerData.name}}</h1>
+    <p>Level: {{vm.summonerData.summonerLevel}}</p>
+  </div>
+</header>
+
+<main class="container content">
+  <section>
+    <h2>Recent Games</h2>
+
+    <div ng-repeat="match in vm.matchList">
+        <match-tile match="match" summoner-id="{{vm.summonerData.id}}"></match-tile>
+    </div>
+
+  </section>
+
+</main>
