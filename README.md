@@ -3,12 +3,12 @@
 ## Summary
 This app uses the MEAN stack and the League of Legends API to create a recent match stats for a given summoner.
 
-##Purpose
+## Purpose
 - To apply angular patterns inspired by [John Papa's Angular Styleguide](https://github.com/johnpapa/angular-styleguide/blob/master/a1/README.md).
 - Learn more about GruntJs, Bower and Yeoman generators
 - Explore NodeJs with express
 
-###To Do
+### To Do
 - Add CSS to make mobile view nicer
 - Implement unit tests for NodeJs service and angular services
 
