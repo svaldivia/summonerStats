@@ -11,6 +11,8 @@ This app uses the MEAN stack and the League of Legends API to create a recent ma
 ### To Do
 - Add CSS to make mobile view nicer
 - Implement unit tests for NodeJs service and angular services
+- Add error handling for API calls
+- Fix occasional navigation issue
 
 
 ## Getting Started
